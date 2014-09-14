@@ -1,24 +1,30 @@
 # Gitgit
 
-TODO: Write a gem description
+Git for beginners!
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-    gem 'gitgit'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
+On the command line type:
 
     $ gem install gitgit
 
 ## Usage
 
-TODO: Write usage instructions here
+To commit your files to the repository:
+
+    $ gitgit commit
+
+To see all your commits:
+
+    $ gitgit log
+
+To see which files have changed since your last commit:
+
+    $ gitgit status
+
+To push your files to github:
+
+    $ gitgit push
 
 ## Contributing
 

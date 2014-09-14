@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'gitgit'
+
+chatter = Gitgit::Chatter.new
+catter.say_hello
