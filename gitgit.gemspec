@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["tom.close@cantab.net"]
   spec.summary       = %q{A simple wrapper around git to make it more accessible to beginners.}
   spec.description   = %q{Gitgit provides a reduced set of commands that make it easy for beginners to use git to version control their projects.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/tomclose/gitgit"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
