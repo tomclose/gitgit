@@ -2,5 +2,4 @@
 
 require 'gitgit'
 
-chatter = Gitgit::Chatter.new
-catter.say_hello
+chatter = Gitgit::CLI.start
