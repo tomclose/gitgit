@@ -9,6 +9,7 @@ module Gitgit
 
     desc "init", "Initialise a git repo"
     def init
+      return unless yes? "You're in the folder #{Dir.pwd}. Are you sure you want to make it into a git repository? (y/n)"
       Git.init
       say "Git repo created! Let's git going ...", :green
     end
@@ -16,27 +17,50 @@ module Gitgit
     desc "save", "Save you changes to the repo"
     def save
       g = get_git_repo || return
-      show_status(g)
 
       say "You're about to save the following changes:"
       say ""
+      show_status(g)
+
       return unless yes? "Do you want to save these changes to git? (y/n)"
       m = ask "Give a short description of the work you're saving: "
       g.add(all:true)
       g.commit(m)
-      say "Changes saved", :green
+      say "Changes saved! :)", :green
     end
 
     desc "status", "See what changes you've made since you last save"
     def status
       g = get_git_repo || return
+      say "The following changes have occurred since your last save:"
       show_status(g)
+      say ""
+      say "Type 'gitgit save' to save your work!"
+      say ""
     end
 
     desc "lg", "Show your recent saves"
     def lg
       g = Git.open('.')
       g.log(20).each {|l| puts l }
+    end
+
+    desc "push", "Push your changes to github"
+    def push
+      g = get_git_repo || return
+
+      if g.remotes.empty?
+        say "Can't push as this repository has no remotes!", :red
+        say ""
+        say "You need to set up a repository on github and follow the instructions to connect it to this folder on your laptop."
+        return
+      end
+
+      if g.push
+        say "Work successfully pushed to github!", :green
+      else
+        say "There was a pushing your work up. :(", :red
+      end
     end
 
     no_commands do
