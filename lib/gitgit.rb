@@ -15,8 +15,55 @@ module Gitgit
 
     desc "save", "Save you changes to the repo"
     def save
-      begin
-        g = Git.open('.')
+      g = get_git_repo || return
+      show_status(g)
+
+      say "You're about to save the following changes:"
+      say ""
+      return unless yes? "Do you want to save these changes to git? (y/n)"
+      m = ask "Give a short description of the work you're saving: "
+      g.add(all:true)
+      g.commit(m)
+      say "Changes saved", :green
+    end
+
+    desc "status", "See what changes you've made since you last save"
+    def status
+      g = get_git_repo || return
+      show_status(g)
+    end
+
+    desc "lg", "Show your recent saves"
+    def lg
+      g = Git.open('.')
+      g.log(20).each {|l| puts l }
+    end
+
+    no_commands do
+      def show_status(g)
+        say ""
+        say "New files:"
+        new_files = g.status.added.merge(g.status.untracked)
+        new_files.each do |k, v|
+          say "     #{k}", :green
+        end
+        say "     none" if new_files.length == 0
+        say ""
+        say "Changed files:"
+        g.status.changed.each do |k, v|
+          say "     #{k}", :yellow
+        end
+        say "     none" if g.status.changed.length == 0
+        say ""
+        say "Deleted files:"
+        g.status.deleted.each do |k, v|
+          say "     #{k}", :red
+        end
+        say "     none" if g.status.deleted.length == 0
+      end
+
+      def get_git_repo
+        Git.open('.')
       rescue ArgumentError
         say "This folder isn't git enabled. Check you're in the right folder!", :red
         say ""
@@ -27,39 +74,8 @@ module Gitgit
         say "      gitgit init"
         say ""
         say "If not, use cd to move to the right folder."
-        return
+        false
       end
-      say "You're about to save the following changes:"
-      say ""
-      say "New files:"
-      new_files = g.status.added.merge(g.status.untracked)
-      new_files.each do |k, v|
-        say "     #{k}", :green
-      end
-      say "     none" if new_files.length == 0
-      say ""
-      say "Changed files:"
-      g.status.changed.each do |k, v|
-        say "     #{k}", :yellow
-      end
-      say "     none" if g.status.changed.length == 0
-      say ""
-      say "Deleted files:"
-      g.status.deleted.each do |k, v|
-        say "     #{k}", :red
-      end
-      say "     none" if g.status.deleted.length == 0
-      say ""
-      return unless yes? "Do you want to save these changes to git? (y/n)"
-      m = ask "Give a short description of the work you're saving: "
-      g.add(all:true)
-      g.commit(m)
-    end
-
-    desc "lg", "Show your recent saves"
-    def lg
-      g = Git.open('.')
-      g.log(20).each {|l| puts l }
     end
 
   end
