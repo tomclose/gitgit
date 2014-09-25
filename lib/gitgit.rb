@@ -65,25 +65,33 @@ module Gitgit
 
     no_commands do
       def show_status(g)
+        if g.ls_files.empty?
+          new_files     = Dir.entries(".").select {|x| x[0] != "." }
+          changed_files = []
+          deleted_files = []
+        else
+          new_files     = g.status.added.merge(g.status.untracked)
+          changed_files = g.status.changed
+          deleted_files  = g.status.deleted
+        end
         say ""
         say "New files:"
-        new_files = g.status.added.merge(g.status.untracked)
         new_files.each do |k, v|
           say "     #{k}", :green
         end
-        say "     none" if new_files.length == 0
+        say "     none" if new_files.empty?
         say ""
         say "Changed files:"
-        g.status.changed.each do |k, v|
+        changed_files.each do |k, v|
           say "     #{k}", :yellow
         end
-        say "     none" if g.status.changed.length == 0
+        say "     none" if changed_files.empty?
         say ""
         say "Deleted files:"
-        g.status.deleted.each do |k, v|
+        deleted_files.each do |k, v|
           say "     #{k}", :red
         end
-        say "     none" if g.status.deleted.length == 0
+        say "     none" if deleted_files.empty?
       end
 
       def get_git_repo
