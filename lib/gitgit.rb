@@ -56,11 +56,11 @@ module Gitgit
         return
       end
 
-      if g.push
-        say "Work successfully pushed to github!", :green
-      else
-        say "There was a pushing your work up. :(", :red
-      end
+      g.push
+      say "Work successfully pushed to github!", :green
+
+    rescue Git::GitExecuteError
+      say "There was a problem pushing your work to github. :(", :red
     end
 
     no_commands do
