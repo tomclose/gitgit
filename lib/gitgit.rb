@@ -79,6 +79,12 @@ module Gitgit
       say "Site pushed to the gh-pages branch on github!", :green
     end
 
+    desc "version", "Show which version of gitgit you're running"
+    def version
+      say "You're running gitgit version #{Gitgit::VERSION}!"
+    end
+
+
 
     no_commands do
       def show_status(g)
