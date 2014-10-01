@@ -63,6 +63,23 @@ module Gitgit
       say "There was a problem pushing your work to github. :(", :red
     end
 
+    desc "publish", "Publish your site to GitHub pages"
+    def publish
+       g = get_git_repo || return
+
+      if g.remotes.empty?
+        say "Can't push as this repository has no remotes!", :red
+        say ""
+        say "You need to set up a repository on github and follow the instructions to connect it to this folder on your laptop."
+        return
+      end
+
+      g.push(g.remote('origin'), 'master:gh-pages', force: true)
+
+      say "Site pushed to the gh-pages branch on github!", :green
+    end
+
+
     no_commands do
       def show_status(g)
         if g.ls_files.empty?
