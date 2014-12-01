@@ -24,7 +24,7 @@ module Gitgit
 
       return unless yes? "Do you want to save these changes to git? (y/n)"
       m = ask "Give a short description of the work you're saving: "
-      g.add(all:true)
+      g.add(:all => true)
       g.commit(m)
       say "Changes saved! :)", :green
     end
@@ -74,7 +74,7 @@ module Gitgit
         return
       end
 
-      g.push(g.remote('origin'), 'master:gh-pages', force: true)
+      g.push(g.remote('origin'), 'master:gh-pages', :force => true)
 
       say "Site pushed to the gh-pages branch on github!", :green
     end
